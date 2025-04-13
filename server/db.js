@@ -9,3 +9,5 @@ const pool = new Pool({
     password: dotenv.DB_PASSWORD
 
 });
+
+module.exports = pool;

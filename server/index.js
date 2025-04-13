@@ -13,12 +13,12 @@ app.use(express.json()); // gives access to req.body
 app.post('/routeTodo', async(req,res) => {
     try {
         const { name, grade, length } = req.body;
-        const newTodo = await pool.query(
+        const newRoute = await pool.query(
             "INSERT INTO todo (description) VALUES($1) RETURNING *", 
-            [description]
+            [name]
         );
 
-        res.json(newTodo.rows[0]);
+        res.json(newRoute.rows[0]);
     } catch (error) {
         console.error(error.message);
     }

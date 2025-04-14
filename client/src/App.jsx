@@ -5,7 +5,17 @@ function App() {
   
   return (
     <>
-      
+      <nav>
+        <TopSpot />
+        <Nav />
+      </nav>
+      <main>
+        <Dashboard />
+      </main>
+      <footer>
+        <Outro />
+        <Doormat />
+      </footer>
     </>
   )
 }

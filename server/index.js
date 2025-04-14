@@ -9,16 +9,16 @@ app.use(express.json()); // gives access to req.body
 
 // Routes
 
-//create todo
-app.post('/routeTodo', async(req,res) => {
+//create new Route
+app.post('/newroute', async(req,res) => {
     try {
-        const { name, grade, length } = req.body;
+        const { name, grade, length, info } = req.body;
         const newRoute = await pool.query(
-            "INSERT INTO todo (description) VALUES($1) RETURNING *", 
-            [name]
+            "INSERT INTO newRoute (name, grade, length, info) VALUES($1, $2, $3, $4) RETURNING *", 
+            [name, grade, length, info]
         );
 
-        res.json(newRoute.rows[0]);
+        res.json(newRoute.rows);
     } catch (error) {
         console.error(error.message);
     }
@@ -57,15 +57,40 @@ app.get("/climbingroutes/:id", async (req,res) => {
     }
 });
 
-//update a todo
+//update a new Route
 
-app.put("/climbingroutes/:id", async (req, res) => {
-    const { description } = req.body;
-
+app.put("/newroute/:id", async (req, res) => {
+    try {
+        const { name, grade, length, info } = req.body;
+        const { id } = req.params;
+        const updatedRoute = await pool.query(
+            "UPDATE newRoute SET name = $1, grade = $2, length = $3, info = $4 WHERE route_id = $5 RETURNING *;",
+            [name, grade, length, info, id]
+        );
+        
+        res.json(updatedRoute.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+    
 });
 
-//delete a todo
+//delete a new route suggestion
+app.delete("/newroute/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const remainingRoutes = await pool.query(
+            "DELETE FROM newRoute WHERE route_id = $1",
+            [id]
+        );
+        
+        res.json("route was deleted");
+    } catch (error) {
+        console.error(error.message);
+    }
+    
 
+});
 
 
 app.listen(5000, () => {
